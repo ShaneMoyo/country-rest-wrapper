@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'; 
 import { getCountryByName } from '../../services/countryAPI';
-import { Link } from 'react-router-dom'; 
+import { Link, Route, Switch } from 'react-router-dom'; 
+import Country from './country'
 
 
 export default function CountriesContainer() { 
@@ -39,7 +40,9 @@ export default function CountriesContainer() {
     }, [search])
 
     const countrieItems = countries.map(({ name }, index) => (
-        <li key={index}><Link to={`/country/${name}`}>{name}</Link></li>
+        <li key={index} style={{ listStyle: "none"}}>
+            <Link to={`/country/${name}`}>{name}</Link>
+        </li>
     )) 
 
     const countryList = countries.length > 0 && !error ? <ul>{countrieItems}</ul> : null;
@@ -47,19 +50,25 @@ export default function CountriesContainer() {
     return (
         <section>
             <h1>Countries</h1> 
-            <form onSubmit={event => handleSubmit(event)}> 
-                <fieldset>
-                    <label htmlFor="country-search">Search for a country</label><br/>
-                    <input 
-                        id="country-search"
-                        type="text" 
-                        onChange={({ target }) => setQuery(target.value)} 
-                        value={query}
-                        placeholder="Enter a country name"/>
-                    <button type="submit">{loading ? 'loading....' : 'Search'}</button> 
-                </fieldset>
-            </form>
-            {loading ? "Loading..." : countryList}
+            
+            <Switch>
+                <Route path="/country/:country" render={(props) => <Country {...props} key={props.match.params.country} />}/>
+                <Route path="/country"> 
+                    <form onSubmit={event => handleSubmit(event)}> 
+                        <fieldset>
+                            <label htmlFor="country-search">Search for a country</label><br/>
+                            <input 
+                                id="country-search"
+                                type="text" 
+                                onChange={({ target }) => setQuery(target.value)} 
+                                value={query}
+                                placeholder="Enter a country name"/>
+                            <button type="submit">{loading ? 'loading....' : 'Search'}</button> 
+                        </fieldset>
+                    </form>
+                    {loading ? "Loading..." : countryList}
+                </Route>
+            </Switch>
         </section>
     ); 
 }
