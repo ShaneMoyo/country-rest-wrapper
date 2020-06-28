@@ -1,30 +1,49 @@
-import React, { useState } from 'react'; 
+import React, { useState, useEffect } from 'react'; 
 import { getCountryByName } from '../../services/countryAPI';
 import { Link } from 'react-router-dom'; 
 
 
 export default function CountriesContainer() { 
 
-    const [query, setQuery] = useState(""); 
+    const [query, setQuery] = useState("");
+    const [search, setSearch] = useState("");  
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(false);
     const [countries, setCountries] = useState([]);
 
     const handleSubmit = async event => { 
         event.preventDefault(); 
         console.log('query: ', query); 
-        try { 
-            const gotCountries = await getCountryByName(query); 
-            console.log( 'countries: ', gotCountries); 
-            setCountries(gotCountries); 
-        } catch (error) { 
-            console.log('error'); 
-        }
+        setSearch(query);
     }
+
+    useEffect(() => {
+        async function handleSearch() {
+            if(search) {   
+                try { 
+                    setLoading(true);
+                    setError(false);
+                    const gotCountries = await getCountryByName(search); 
+                    console.log( 'countries: ', gotCountries); 
+                    setCountries(gotCountries); 
+                    setLoading(false);
+                } catch (error) { 
+                    console.log('error'); 
+                    setLoading(false);
+                    setError(true);
+                }
+            } 
+        }
+        handleSearch()
+        
+    }, [search])
 
     const countrieItems = countries.map(({ name }, index) => (
         <li key={index}><Link to={`/country/${name}`}>{name}</Link></li>
     )) 
 
-    const countryList = countries.length > 0 ?  <ul>{countrieItems}</ul>  : null;
+    const countryList = countries.length > 0 && !error ? <ul>{countrieItems}</ul> : null;
+
     return (
         <section>
             <h1>Countries</h1> 
@@ -37,10 +56,10 @@ export default function CountriesContainer() {
                         onChange={({ target }) => setQuery(target.value)} 
                         value={query}
                         placeholder="Enter a country name"/>
-                    <button type="submit">Search</button> 
+                    <button type="submit">{loading ? 'loading....' : 'Search'}</button> 
                 </fieldset>
             </form>
-            {countryList}
+            {loading ? "Loading..." : countryList}
         </section>
     ); 
 }
