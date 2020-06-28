@@ -33,7 +33,11 @@ export default function Country(props) {
     } else { 
         return (
             <section>
-                <h1>Country: {country.name}</h1> 
+                <ul style={{ listStyle: 'none' }}>
+                    <li><img style={{ width: '100px', height: '100px'}} alt="flag"src={country.flag}/></li>
+                    <li>Country: {country.name}</li>
+                    <li>Capitol: {country.capital}</li>
+                </ul> 
             </section>
         )
     }
