@@ -19,3 +19,5 @@ export const getCountryByFullName = async country => {
         console.log('error: ', error); 
     }
 }
+
+//https://restcountries.eu/rest/v2/name/aruba?fullText=true

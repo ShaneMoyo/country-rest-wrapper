@@ -11,7 +11,6 @@ export default class Resource extends React.Component {
         try { 
             const response = await this.props.fetch(); 
             this.setState({
-                error: false,
                 loading: false, 
                 resource: response
             });
