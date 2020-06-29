@@ -33,7 +33,7 @@ export default class Resource extends React.Component {
         } else if(error) { 
             return <h1>Something went wrong...</h1>
         } else { 
-            return this.props.render(resource); 
+            return this.props.children(resource); 
         }
     } 
 }

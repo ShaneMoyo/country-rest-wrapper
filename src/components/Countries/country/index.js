@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'; 
+import React from 'react'; 
 import { getCountryByName } from '../../../services/countryAPI';
 import Resource from '../utils/Resource';
 
@@ -8,8 +8,8 @@ export default function Country(props) {
     
 
     return (
-        <Resource fetch={() => getCountryByName(countryName)} render={
-            country => (
+        <Resource fetch={() => getCountryByName(countryName)}>
+            { country => (
                 <section>
                     <ul style={{ listStyle: 'none' }}>
                         <li><img style={{ width: '100px', height: '100px'}} alt="flag"src={country[0].flag}/></li>
@@ -17,7 +17,7 @@ export default function Country(props) {
                         <li>Capitol: {country[0].capital}</li>
                     </ul> 
                 </section>
-            )
-        }/>
+            )}  
+        </Resource>
     )
 }
