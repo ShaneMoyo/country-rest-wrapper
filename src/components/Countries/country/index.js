@@ -3,12 +3,8 @@ import { getCountryByName } from '../../../services/countryAPI';
 import Resource from '../utils/Resource';
 
 export default function Country(props) { 
-    
-    const { country: countryName } = props.match.params; 
-    
-
     return (
-        <Resource fetch={() => getCountryByName(countryName)}>
+        <Resource fetch={() => getCountryByName(props.match.params.country)}>
             { country => (
                 <section>
                     <ul style={{ listStyle: 'none' }}>
